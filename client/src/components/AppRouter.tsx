@@ -7,7 +7,7 @@ import { RootState } from '../store/store';
 
 type Props = {};
 export const AppRouter = (props: Props) => {
-    const isAuth = useSelector<RootState,boolean>(state => state.user.isAuth)
+    const isAuth = useSelector<RootState,boolean>(state => state.auth.isAuth)
     return (
         <Switch>
             {

@@ -4,12 +4,12 @@ import {RootState} from '../store/store';
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@material-ui/core";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCartOutlined';
 import {NavLink} from 'react-router-dom';
-import { setIsAuth } from '../store/reducers/user-reducer';
+import { setIsAuth } from '../store/reducers/auth-reducer';
 
 
 type Props = {};
 export const NavBar = (props: Props) => {
-    const isAuth = useSelector<RootState, boolean>(state => state.user.isAuth)
+    const isAuth = useSelector<RootState, boolean>(state => state.auth.isAuth)
     const dispatch = useDispatch()
     return (
         <Box sx={{flexGrow: 1}}>
