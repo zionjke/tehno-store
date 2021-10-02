@@ -1,30 +1,40 @@
 import * as React from 'react';
-import {Box, Button, Card, CardActions, CardContent, Grid, List, ListItem, ListItemText, Paper, Rating, Typography} from '@material-ui/core';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Grid,
+    List,
+    ListItem,
+    ListItemText,
+    Rating,
+    Typography
+} from '@material-ui/core';
+import {useParams} from "react-router-dom";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {OneDeviceType} from "../http/deviceApi";
+import { RootState } from '../store/store';
+import {fetchOneDevice} from "../store/reducers/device-reducer";
 
 
-type Props = {};
-
-export const DevicePage = (props: Props) => {
+export const DevicePage = () => {
+    const device = useSelector<RootState,OneDeviceType>(state => state.devices.device)
+    const dispatch = useDispatch()
     const [value, setValue] = React.useState<number | null>(2);
-    const device = {
-        id: 1,
-        name: 'Iphone 12 pro',
-        price: 25000,
-        rating: 5,
-        img: 'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'
-    }
-    const descr = [
-        {id:1,title:'Оперативная память',description:'5гб'},
-        {id:2,title:'Камера',description:'12 МП'},
-        {id:3,title:'Процессор',description:'SnapDragon'},
-        {id:4,title:'Кол-во ядер',description:'4'},
-        {id:5,title:'Аккумулятор',description:'4000 МАч'},
-    ]
+    const {id} = useParams<{ id: string }>()
+
+    useEffect(() => {
+        dispatch(fetchOneDevice(id))
+    },[])
+
+    console.log(device)
     return (
         <Box sx={{flexGrow: 3, padding: 5}}>
             <Grid container spacing={3}>
                 <Grid item xs={3}>
-                    <img style={{width: '400px', height: '400px'}} src={device.img} alt=""/>
+                    <img style={{width: '400px', height: '400px'}} src={process.env.REACT_APP_API_URL + '/' + device.img} alt=""/>
                 </Grid>
                 <Grid textAlign={"center"} item xs={3}>
                     <Card sx={{minWidth: 275, padding: 4}}>
@@ -45,7 +55,7 @@ export const DevicePage = (props: Props) => {
                         <Typography sx={{marginBottom:1}} variant={"h4"}>
                             Характеристики
                         </Typography>
-                        {descr.map((d,i) => (
+                        {device.info && device.info.map((d,i) => (
                             <ListItem style={{padding: '0'}} key={d.id}>
                                 <ListItemText style={{background: i % 2 === 0 ? 'lightgray' : "transparent",padding:'8px'}}>
                                     {d.title}: {d.description}

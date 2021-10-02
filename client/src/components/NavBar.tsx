@@ -3,9 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from '../store/store';
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@material-ui/core";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCartOutlined';
-import {NavLink} from 'react-router-dom';
-import {logOut, setIsAuth} from '../store/reducers/auth-reducer';
-import {useHistory} from "react-router-dom";
+import {NavLink, useHistory} from 'react-router-dom';
+import {logOut} from '../store/reducers/auth-reducer';
 import {ADMIN_ROUTE, LOGIN_ROUTE} from "../utils/consts";
 
 
@@ -50,7 +49,7 @@ export const NavBar = () => {
                                 </Button>
                             </Box>
                             : <Box>
-                                <Button onClick={() => dispatch(setIsAuth(true))} variant={'outlined'}
+                                <Button onClick={() => history.push(LOGIN_ROUTE)} variant={'outlined'}
                                         color="inherit">
                                     Авторизация
                                 </Button>

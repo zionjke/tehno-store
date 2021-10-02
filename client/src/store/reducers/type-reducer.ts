@@ -1,19 +1,43 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {TypeBrandType} from "../../../types";
+import {deviceApi} from "../../http/deviceApi";
+
+export const fetchTypes = createAsyncThunk('types/fetchTypes', async (param, {dispatch, rejectWithValue}) => {
+    try {
+        const {data} = await deviceApi.fetchTypes()
+        return data
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})
+
+export const createType = createAsyncThunk('types/createType', async (name: string, {dispatch, rejectWithValue}) => {
+    try {
+        const {data} = await deviceApi.createType(name)
+        return data
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})
 
 const typesSlice = createSlice({
     name: 'types',
     initialState: {
-        types: [{id: 1, name: 'Холодильники'}, {id: 2, name: 'Смартфоны'}],
+        types: [] as TypeBrandType[],
         selectedType: {} as TypeBrandType
     },
     reducers: {
-        setTypes(state, action:PayloadAction<TypeBrandType[]>) {
-            state.types = action.payload
-        },
-        setSelectedType(state,action:PayloadAction<TypeBrandType>) {
+        setSelectedType(state, action: PayloadAction<TypeBrandType>) {
             state.selectedType = action.payload
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(fetchTypes.fulfilled, (state, action) => {
+            state.types = action.payload
+        });
+        builder.addCase(createType.fulfilled, (state, action) => {
+            state.types.unshift(action.payload)
+        });
     }
 })
 

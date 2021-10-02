@@ -1,5 +1,7 @@
 import * as React from 'react';
 import {Box, Button, Modal, TextField} from "@material-ui/core";
+import {useDispatch} from "react-redux";
+import {createType} from "../../store/reducers/type-reducer";
 
 
 const style = {
@@ -15,15 +17,22 @@ const style = {
     p: 4,
 };
 
-type Props = {
 
-};
+export const CreateType = () => {
+    const dispatch = useDispatch()
 
-export const CreateType = (props: Props) => {
     const [open, setOpen] = React.useState(false);
     const [typeName, setTypeName] = React.useState('');
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const addTypeHandler = () => {
+        dispatch(createType(typeName))
+        setTypeName('')
+        setOpen(false)
+    }
+
     return (
         <Box>
             <Button onClick={handleOpen}>Добавить тип</Button>
@@ -34,8 +43,15 @@ export const CreateType = (props: Props) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TextField value={typeName}  label="Имя типа" variant="outlined" />
-                    <Button variant={"outlined"} sx={{marginLeft:1}}>Добавить</Button>
+                    <TextField value={typeName}
+                               onChange={(event) => setTypeName(event.currentTarget.value)}
+                               label="Имя типа"
+                               variant="outlined"/>
+                    <Button onClick={addTypeHandler}
+                            variant={"outlined"}
+                            sx={{marginLeft: 1}}>
+                        Добавить
+                    </Button>
                 </Box>
             </Modal>
         </Box>

@@ -1,20 +1,45 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {DeviceType} from "../../../types";
+import {deviceApi, OneDeviceType} from "../../http/deviceApi";
+
+export const fetchDevices = createAsyncThunk('devices/fetchDevices', async (param, {dispatch, rejectWithValue}) => {
+    try {
+        const {data} = await deviceApi.fetchDevices()
+        const devices = data.rows
+        const count = data.count
+        return {devices, count}
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})
+
+
+export const fetchOneDevice = createAsyncThunk('devices/fetchOneDevice', async (id:string, {dispatch, rejectWithValue}) => {
+    try {
+        const {data} = await deviceApi.fetchOneDevice(id)
+        return data
+    } catch (e) {
+        return rejectWithValue(null)
+    }
+})
 
 const deviceSlice = createSlice({
     name: 'devices',
-    initialState: [
-        {id:1,name: 'Iphone 12 pro',price: 25000, rating:5, img:'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'},
-        {id:2,name: 'Iphone 12 pro',price: 25000, rating:5, img:'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'},
-        {id:3,name: 'Iphone 12 pro',price: 25000, rating:5, img:'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'},
-        {id:4,name: 'Iphone 12 pro',price: 25000, rating:5, img:'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'},
-        {id:5,name: 'Iphone 12 pro',price: 25000, rating:5, img:'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'},
-        {id:6,name: 'Iphone 12 pro',price: 25000, rating:5, img:'https://estore.ua/media/catalog/product/cache/8/image/650x650/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12-pro-blue_3.jpg'},
-    ],
-    reducers: {
-        setDevices(state,action) {
-            return action.payload
-        }
-    }
+    initialState: {
+        count: 0,
+        devices: [] as DeviceType[],
+        device: {} as OneDeviceType
+    },
+    reducers: {},
+    extraReducers: builder => {
+        builder.addCase(fetchDevices.fulfilled, (state, action) => {
+            state.devices = action.payload.devices
+            state.count = action.payload.count
+        });
+        builder.addCase(fetchOneDevice.fulfilled,(state,action) => {
+            state.device = action.payload
+        })
+    },
 })
 
 export default deviceSlice.reducer

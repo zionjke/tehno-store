@@ -18,7 +18,7 @@ export const Device = ({device}: Props) => {
             <CardMedia
                 component="img"
                 height="194"
-                image={device.img}
+                image={process.env.REACT_APP_API_URL + '/' + device.img}
                 alt="Paella dish"
             />
             <CardContent>

@@ -5,11 +5,12 @@ import {TypeBrandType} from "../../types";
 import {Box, List, ListItemButton, ListItemText} from "@material-ui/core";
 
 type Props = {
+    brands: TypeBrandType[]
     selectBrandHandler: (brand: TypeBrandType) => void
     selectedBrand: TypeBrandType
 };
 
-export const BrandBar = ({selectBrandHandler, selectedBrand}: Props) => {
+export const BrandBar = ({selectBrandHandler, selectedBrand,brands}: Props) => {
 
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -17,7 +18,6 @@ export const BrandBar = ({selectBrandHandler, selectedBrand}: Props) => {
     ) => {
         selectBrandHandler(brand)
     };
-    const brands = useSelector<RootState, TypeBrandType[]>(state => state.brands.brands)
 
     return (
         <Box sx={{width: '20%'}}>
