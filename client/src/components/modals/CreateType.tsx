@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Box, Button, Modal, TextField} from "@material-ui/core";
 import {useDispatch} from "react-redux";
 import {createType} from "../../store/reducers/type-reducer";
+import {deviceApi} from "../../http/deviceApi";
 
 
 const style = {
@@ -28,7 +29,7 @@ export const CreateType = () => {
     const handleClose = () => setOpen(false);
 
     const addTypeHandler = () => {
-        dispatch(createType(typeName))
+       dispatch(createType(typeName))
         setTypeName('')
         setOpen(false)
     }

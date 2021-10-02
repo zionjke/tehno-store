@@ -10,10 +10,14 @@ import {fetchBrands, setSelectedBrand} from "../store/reducers/brand-reducer";
 import {DeviceList} from "../components/DeviceList";
 import {useEffect} from "react";
 import {fetchDevices} from "../store/reducers/device-reducer";
+import { Redirect } from 'react-router-dom';
+import {LOGIN_ROUTE} from "../utils/consts";
 
 
 export const Shop = () => {
     const dispatch = useDispatch()
+
+    const isAuth = useSelector<RootState,boolean>(state => state.auth.isAuth)
 
     const selectedType = useSelector<RootState, TypeBrandType>(state => state.types.selectedType)
     const selectedBrand = useSelector<RootState, TypeBrandType>(state => state.brands.selectedBrand)
@@ -36,6 +40,10 @@ export const Shop = () => {
         dispatch(fetchBrands())
         dispatch(fetchDevices())
     }, [])
+
+    if(!isAuth) {
+        return <Redirect to={LOGIN_ROUTE}/>
+    }
 
     return (
         <Grid container spacing={2}>

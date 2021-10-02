@@ -16,6 +16,13 @@ function App() {
         dispatch(initializeApp())
     },[])
 
+    if(!isInitialized) {
+        return (
+            <div className='circularProgress'>
+                <CircularProgress/>
+            </div>
+        )
+    }
 
     return (
         <BrowserRouter>

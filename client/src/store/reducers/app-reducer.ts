@@ -5,7 +5,7 @@ import {setIsAuth} from "./auth-reducer";
 export const initializeApp = createAsyncThunk('app/initialize', async (param, {dispatch, rejectWithValue}) => {
     try {
         dispatch(setIsAuth(true))
-        return  await authApi.check()
+         return  await authApi.check()
     } catch (e) {
         return rejectWithValue(null)
     }
