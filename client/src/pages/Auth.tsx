@@ -1,15 +1,32 @@
 import * as React from 'react';
-import {Button, Container, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useFormik} from "formik";
 import * as Yup from 'yup';
-import {LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
-import {NavLink, useLocation} from 'react-router-dom';
+import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import {NavLink, Redirect, useHistory, useLocation} from 'react-router-dom';
+import {authApi, UserParamsType} from "../http/userApi";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from '../store/store';
+import {login} from "../store/reducers/auth-reducer";
 
-type Props = {};
 
-export const Auth = (props: Props) => {
+
+export const Auth = () => {
+    const isAuth = useSelector<RootState, boolean>(state => state.auth.isAuth)
+    const dispatch = useDispatch()
     const location = useLocation()
+    const history = useHistory()
     const isLogin = location.pathname === LOGIN_ROUTE
+
+
+    const onAuthHandler = async (data: UserParamsType) => {
+        if (isLogin) {
+            dispatch(login(data))
+        } else {
+            await authApi.registration(data)
+            history.push(LOGIN_ROUTE)
+        }
+    }
 
     const validationSchema = Yup.object({
         email: Yup
@@ -28,11 +45,16 @@ export const Auth = (props: Props) => {
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (data) => {
-            console.log(data)
+        onSubmit: async (data) => {
+            await onAuthHandler(data)
         },
 
     });
+
+    if (isAuth) {
+        return <Redirect to={SHOP_ROUTE}/>
+    }
+
     return (
         <Grid container justifyContent={'center'}>
             <Grid item xs={4}>

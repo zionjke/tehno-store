@@ -42,6 +42,9 @@ export const DevicePage = (props: Props) => {
                 </Grid>
                 <Grid  item xs={6}>
                     <List disablePadding>
+                        <Typography sx={{marginBottom:1}} variant={"h4"}>
+                            Характеристики
+                        </Typography>
                         {descr.map((d,i) => (
                             <ListItem style={{padding: '0'}} key={d.id}>
                                 <ListItemText style={{background: i % 2 === 0 ? 'lightgray' : "transparent",padding:'8px'}}>
